@@ -1,82 +1,119 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GraduationCap, Book, Users, Search, ChevronRight } from "lucide-react";
+import {
+  GraduationCap,
+  Book,
+  Users,
+  Search,
+  ChevronRight,
+  Globe,
+  Clock,
+  Award,
+  Code,
+} from "lucide-react";
+
+import { useRef } from "react";
+import * as THREE from "three";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Link } from "react-router-dom";
+import heroImage from "../assets/images/hero.jpeg";
+import avatar from "../assets/images/avatar.jpeg";
 
-export default function HomePage() {
+function WaveGrid() {
+  const meshRef = useRef();
+  const geometry = new THREE.PlaneGeometry(30, 30, 50, 50);
+  const material = new THREE.MeshStandardMaterial({
+    color: 0x00ff80,
+    wireframe: true,
+    side: THREE.DoubleSide,
+  });
+
+  useFrame(({ clock }) => {
+    const positions = meshRef.current.geometry.attributes.position;
+    const time = clock.getElapsedTime();
+
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const z = 0.5 * Math.sin(x + time) * Math.cos(y + time);
+      positions.setZ(i, z);
+    }
+    positions.needsUpdate = true;
+  });
+
   return (
-    <div className="min-h-screen flex flex-col w-full">
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <GraduationCap className="h-8 w-8 text-green-600" />
-            <span className="text-2xl font-bold text-gray-800">
-              Annibrass Academy
-            </span>
-          </Link>
-          <nav className="hidden md:flex space-x-8">
-            <Link
-              to="#"
-              className="text-gray-600 hover:text-green-600 transition-colors"
-            >
-              Courses
-            </Link>
-            <Link
-              to="#"
-              className="text-gray-600 hover:text-green-600 transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              to="#"
-              className="text-gray-600 hover:text-green-600 transition-colors"
-            >
-              Contact
-            </Link>
-          </nav>
-          <Button className="hidden md:inline-flex bg-green-600 text-white hover:bg-green-700">
-            Sign Up
-          </Button>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Search className="h-5 w-5" />
-          </Button>
-        </div>
-      </header>
+    <mesh
+      ref={meshRef}
+      rotation={[-Math.PI / 3, 0, 0]}
+      position={[0, -2, 0]}
+      geometry={geometry}
+      material={material}
+    />
+  );
+}
 
+export default function EnhancedHomePage() {
+  return (
+    <div className="min-h-screen flex flex-col w-full bg-gray-900 text-white">
       <main className="flex-grow">
-        <section className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-20">
-          <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-8 md:mb-0">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                Unlock Your Potential with Annibrass Academy
+        <section className="h-screen relative bg-gradient-to-b from-gray-900 to-green-900 overflow-hidden">
+          <div className="absolute inset-0">
+            <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} />
+              <WaveGrid />
+            </Canvas>
+          </div>
+          <header className=" mx-auto container shadow-sm">
+            <div className="  px-4 py-4 flex items-center justify-between">
+              <Link to="/" className="flex items-center space-x-2">
+                <GraduationCap className="h-8 w-8 text-green-600" />
+                <span className="text-2xl font-bold text-green-600">
+                  Annibrass Academy
+                </span>
+              </Link>
+              <Button className="hidden md:inline-flex bg-green-600 text-white hover:bg-green-700 focus:outline-none">
+                Sign Up
+              </Button>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Search className="h-5 w-5" />
+              </Button>
+            </div>
+          </header>
+          <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+            <div className="text-white max-w-3xl">
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300">
+                Let&apos;s Build Your Future in An-nibrass
               </h1>
-              <p className="text-xl mb-6">
-                Discover a world of knowledge with our expert-led courses.
+              <p className="text-xl md:text-2xl mb-8 text-green-100">
+                Transform your career with cutting-edge courses at An-nibrass
+                Academy
               </p>
-              <div className="flex space-x-4">
-                <Button className="bg-white text-green-600 hover:bg-gray-100">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button className="bg-green-500 text-white hover:bg-green-600 text-lg px-8 py-6">
                   Get Started
-                  <ChevronRight className="ml-2 h-4 w-4" />
+                  <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button
                   variant="outline"
-                  className="bg-white text-green-600 hover:bg-gray-100"
+                  className="border-green-500 text-green-500 hover:bg-green-500 hover:text-white text-lg px-8 py-6"
                 >
-                  Learn More
+                  Explore Courses
                 </Button>
               </div>
             </div>
-            <div className="md:w-1/2">
-              <img
-                src="https://images.pexels.com/photos/919073/pexels-photo-919073.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Students learning"
-                className="rounded-lg shadow-xl"
-              />
-            </div>
+          </div>
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm flex flex-col items-center animate-bounce">
+            <span className="mb-2">Scroll</span>
+            <ChevronRight className="h-4 w-4 rotate-90" />
           </div>
         </section>
 
-        <section className="py-20 bg-gray-50">
+        {/* Rest of the sections remain unchanged */}
+        {/* Featured Courses Section */}
+        {/* <section className="py-20 bg-gray-800">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">
               Featured Courses
@@ -85,10 +122,10 @@ export default function HomePage() {
               {[1, 2, 3].map((course) => (
                 <div
                   key={course}
-                  className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105"
+                  className=" rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105"
                 >
                   <img
-                    src={`https://images.pexels.com/photos/919073/pexels-photo-919073.jpeg?auto=compress&cs=tinysrgb&w=600`}
+                    src={heroImage}
                     alt={`Course ${course}`}
                     className="w-full h-48 object-cover"
                   />
@@ -100,9 +137,6 @@ export default function HomePage() {
                       Learn the fundamentals and advance your skills.
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-green-600 font-semibold">
-                        $49.99
-                      </span>
                       <Button
                         variant="outline"
                         className="text-green-600 border-green-600 hover:bg-green-600 hover:text-white"
@@ -115,9 +149,194 @@ export default function HomePage() {
               ))}
             </div>
           </div>
+        </section> */}
+        <section className="py-40 bg-gradient-to-b from-green-900 to-gray-900">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300">
+              Featured Courses
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { title: "Web Development Mastery", icon: Code },
+                { title: "Data Science Fundamentals", icon: Globe },
+                { title: "Mobile App Development", icon: Users },
+              ].map((course, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105 border border-green-500/30"
+                >
+                  <div className="p-10 flex flex-col items-center">
+                    <course.icon className="h-16 w-16 text-green-400 mb-4" />
+                    <h3 className="text-xl font-semibold mb-2 text-center">
+                      {course.title}
+                    </h3>
+                    <p className="text-gray-100 mb-4 text-center">
+                      Master the latest technologies and advance your career.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="mt-auto text-green-400 border-green-400 hover:bg-green-400 hover:text-gray-900"
+                    >
+                      Enroll Now
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
-        <section className="py-20">
+        {/* <section className="py-20 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">
+              Our Approach to Learning
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <Book className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">
+                  Comprehensive Curriculum
+                </h3>
+                <p>
+                  Carefully crafted courses covering all aspects of your chosen
+                  field.
+                </p>
+              </div>
+              <div className="text-center">
+                <Users className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">
+                  Expert Instructors
+                </h3>
+                <p>
+                  Learn from industry professionals with years of experience.
+                </p>
+              </div>
+              <div className="text-center">
+                <GraduationCap className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Practical Skills</h3>
+                <p>
+                  Gain hands-on experience through projects and real-world
+                  applications.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section> */}
+        <section className="py-40 bg-gradient-to-b from-gray-800 to-gray-900">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300">
+              Our Approach to Learning
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Comprehensive Curriculum",
+                  icon: Book,
+                  description:
+                    "Carefully crafted courses covering all aspects of your chosen field.",
+                },
+                {
+                  title: "Expert Instructors",
+                  icon: Users,
+                  description:
+                    "Learn from industry professionals with years of experience.",
+                },
+                {
+                  title: "Practical Skills",
+                  icon: GraduationCap,
+                  description:
+                    "Gain hands-on experience through projects and real-world applications.",
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="text-center bg-gray-800 p-8 rounded-lg shadow-lg"
+                >
+                  <item.icon className="h-16 w-16 mx-auto mb-4 text-green-400" />
+                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                  <p className="text-gray-300">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* <section className="py-20 bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">
+              Why Choose Annibrass Academy?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="text-center">
+                <Globe className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Global Community</h3>
+                <p>Connect with learners from around the world.</p>
+              </div>
+              <div className="text-center">
+                <Clock className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">
+                  Flexible Learning
+                </h3>
+                <p>Study at your own pace, anytime, anywhere.</p>
+              </div>
+              <div className="text-center">
+                <Award className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">
+                  Recognized Certificates
+                </h3>
+                <p>Earn certificates valued by top employers.</p>
+              </div>
+              <div className="text-center">
+                <Users className="h-16 w-16 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Career Support</h3>
+                <p>Get guidance to advance your professional journey.</p>
+              </div>
+            </div>
+          </div>
+  
+  </section> */}
+        <section className="py-40 bg-gray-900">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300">
+              Why Choose Annibrass Academy?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                {
+                  title: "Global Community",
+                  icon: Globe,
+                  description: "Connect with learners from around the world.",
+                },
+                {
+                  title: "Flexible Learning",
+                  icon: Clock,
+                  description: "Study at your own pace, anytime, anywhere.",
+                },
+                {
+                  title: "Recognized Certificates",
+                  icon: Award,
+                  description: "Earn certificates valued by top employers.",
+                },
+                {
+                  title: "Career Support",
+                  icon: Users,
+                  description:
+                    "Get guidance to advance your professional journey.",
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="text-center bg-gray-800 p-6 rounded-lg shadow-lg"
+                >
+                  <item.icon className="h-12 w-12 mx-auto mb-4 text-green-400" />
+                  <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                  <p className="text-gray-300 text-sm">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {/* <section className="py-20">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">
               What Our Students Say
@@ -130,7 +349,7 @@ export default function HomePage() {
                 >
                   <div className="flex items-center mb-4">
                     <img
-                      src={`/placeholder.svg?height=50&width=50&text=Student+${testimonial}`}
+                      src={avatar}
                       alt={`Student ${testimonial}`}
                       className="rounded-full mr-4"
                     />
@@ -147,9 +366,71 @@ export default function HomePage() {
               ))}
             </div>
           </div>
+        </section> */}
+        <section className="py-20 bg-gradient-to-b from-gray-900 to-green-900 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-50">
+            <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} />
+              <WaveGrid />
+            </Canvas>
+          </div>
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300">
+              Ready to Start Learning?
+            </h2>
+            <p className="text-xl mb-8 text-green-100">
+              Join thousands of students and begin your educational journey
+              today.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full sm:w-64 bg-gray-800 text-white placeholder-gray-400 border-green-500 focus:border-green-400"
+              />
+              <Button className="w-full sm:w-auto bg-green-500 text-white hover:bg-green-600">
+                Get Started
+              </Button>
+            </div>
+          </div>
         </section>
 
-        <section className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-20">
+        {/* <section className="py-20 bg-gradient-to-r from-pink-500 to-red-500 text-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">
+              Upcoming Events
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((event) => (
+                <div
+                  key={event}
+                  className="bg-white rounded-lg shadow-md overflow-hidden"
+                >
+                  <img
+                    src={heroImage}
+                    alt={`Event ${event}`}
+                    className="w-full h-48 object-cover "
+                  />
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                      Webinar: Future of AI
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Join us for an insightful discussion on the future of AI
+                      and its impact on various industries.
+                    </p>
+                    <Button className="w-full bg-pink-500 text-white hover:bg-pink-600">
+                      Register Now
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section> */}
+
+        {/* <section className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-20">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Start Learning?
@@ -169,42 +450,46 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
 
       <footer className="bg-gray-800 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">About Us</h3>
-              <p className="text-gray-400">
+              <h3 className="text-lg font-semibold mb-4 text-green-400">
+                About Us
+              </h3>
+              <p className="text-gray-300">
                 Annibrass Academy is dedicated to providing high-quality online
                 education to learners worldwide.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+              <h3 className="text-lg font-semibold mb-4 text-green-400">
+                Quick Links
+              </h3>
               <ul className="space-y-2">
                 <li>
                   <Link
-                    to="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="#"
+                    className="text-gray-300 hover:text-green-400 transition-colors"
                   >
                     Courses
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="#"
+                    className="text-gray-300 hover:text-green-400 transition-colors"
                   >
                     About
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="#"
+                    className="text-gray-300 hover:text-green-400 transition-colors"
                   >
                     Contact
                   </Link>
@@ -212,11 +497,13 @@ export default function HomePage() {
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+              <h3 className="text-lg font-semibold mb-4 text-green-400">
+                Follow Us
+              </h3>
               <div className="flex space-x-4">
                 <Link
-                  to="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  href="#"
+                  className="text-gray-300 hover:text-green-400 transition-colors"
                 >
                   <span className="sr-only">Facebook</span>
                   <svg
@@ -233,8 +520,8 @@ export default function HomePage() {
                   </svg>
                 </Link>
                 <Link
-                  to="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  href="#"
+                  className="text-gray-300 hover:text-green-400 transition-colors"
                 >
                   <span className="sr-only">Twitter</span>
                   <svg
@@ -247,8 +534,8 @@ export default function HomePage() {
                   </svg>
                 </Link>
                 <Link
-                  to="#"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  href="#"
+                  className="text-gray-300 hover:text-green-400 transition-colors"
                 >
                   <span className="sr-only">LinkedIn</span>
                   <svg
@@ -267,17 +554,21 @@ export default function HomePage() {
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
-              <p className="text-gray-400 mb-4">
+              <h3 className="text-lg font-semibold mb-4 text-green-400">
+                Newsletter
+              </h3>
+              <p className="text-gray-300 mb-4">
                 Stay updated with our latest courses and offers.
               </p>
               <div className="flex">
                 <Input
                   type="email"
                   placeholder="Your email"
-                  className="rounded-r-none"
+                  className="rounded-r-none bg-gray-700 text-white placeholder-gray-400 border-green-500 focus:border-green-400"
                 />
-                <Button className="rounded-l-none">Subscribe</Button>
+                <Button className="rounded-l-none bg-green-500 hover:bg-green-600">
+                  Subscribe
+                </Button>
               </div>
             </div>
           </div>
