@@ -9,7 +9,7 @@ export default function Header() {
         <Link to="/" className="flex items-center space-x-2">
           <GraduationCap className="h-8 w-8 text-green-600" />
           <span className="text-2xl font-bold text-green-600">
-            Annibrass Academy
+            Softwadi
           </span>
         </Link>
         <Button className="hidden md:inline-flex bg-green-600 text-white hover:bg-green-700 focus:outline-none">

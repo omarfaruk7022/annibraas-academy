@@ -75,11 +75,10 @@ export default function EnhancedHomePage() {
           <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
             <div className="text-white max-w-3xl">
               <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300">
-                Let&apos;s Build Your Future in An-nibrass
+                Let&apos;s Build Your Future in Softwadi
               </h1>
               <p className="text-xl md:text-2xl mb-8 text-green-100">
-                Transform your career with cutting-edge courses at An-nibrass
-                Academy
+                Transform your career with cutting-edge courses at Softwadi
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button className="bg-green-500 text-white hover:bg-green-600 text-lg px-8 py-6">
@@ -179,7 +178,7 @@ export default function EnhancedHomePage() {
         <section className="pb-40 bg-gray-900">
           <div className="container mx-auto px-4">
             <h2 className="text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-300">
-              Why Choose Annibrass Academy?
+              Why Choose Softwadi ?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[

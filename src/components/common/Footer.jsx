@@ -13,8 +13,8 @@ export default function Footer() {
               About Us
             </h3>
             <p className="text-gray-300">
-              Annibrass Academy is dedicated to providing high-quality online
-              education to learners worldwide.
+              Softwadi is dedicated to providing high-quality software company
+              in the world.
             </p>
           </div>
           <div>
@@ -125,7 +125,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
-          <p>&copy; 2024 An-nibrass Academy. All rights reserved.</p>
+          <p>&copy; 2024 Softwadi. All rights reserved.</p>
         </div>
       </div>
     </footer>
